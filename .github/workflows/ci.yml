@@ -1,10 +1,8 @@
 name: CI
 
-# Quality gate: lint, typecheck, and build on every PR and on pushes to main.
-# Deployment itself is handled by Vercel's native Git integration, not here.
+# Quality gate: lint, typecheck, and build on every PR targeting main.
+# Pushes to main are built + published by deploy.yml, so we don't double-build.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
