@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/*
+  Design tokens for the "Motion Concept" — a dark, generative-AI portfolio.
+  Palette: near-black ink, indigo primary, warm-pink accent, cool greys.
+*/
+@theme {
+  --color-ink: #060709;
+  --color-foreground: #f4f6fb;
+
+  --color-primary: #6e7bff;
+  --color-primary-bright: #7c84ff;
+  --color-accent: #ff9ecd;
+
+  --color-bright: #eef1f8;
+  --color-muted: #aeb4c6;
+  --color-muted-2: #9aa0b0;
+  --color-subtle: #7d8395;
+  --color-faint: #6b7180;
+  --color-fainter: #565c6b;
+  --color-line: rgba(255, 255, 255, 0.09);
+
+  --font-sans: var(--font-sora), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
