@@ -2,6 +2,7 @@ import { Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { defaultMetadata } from "@/lib/seo";
 import { Navbar } from "@/components/layout/Navbar";
+import { DevBanner } from "@/components/layout/DevBanner";
 import { Footer } from "@/components/layout/Footer";
 
 const sora = Sora({
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full">
         <Navbar />
+        <DevBanner />
         <main>{children}</main>
         <Footer />
       </body>
