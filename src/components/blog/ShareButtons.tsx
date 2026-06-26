@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Link2 } from "lucide-react";
 import { LinkedinIcon, XBrandIcon } from "@/components/ui/BrandIcons";
 import { cn } from "@/lib/cn";
@@ -21,6 +21,13 @@ const ICON_BTN =
 export function ShareButtons({ url, title }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
 
+  // Reset the "copied" affordance after 2s, cleaning up on unmount / re-click.
+  useEffect(() => {
+    if (!copied) return;
+    const t = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(t);
+  }, [copied]);
+
   const xHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
     title,
   )}&url=${encodeURIComponent(url)}`;
@@ -32,7 +39,6 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       /* clipboard unavailable — no-op */
     }

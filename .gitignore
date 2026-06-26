@@ -36,6 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# internal planning docs (kept local, not published)
+/123.md
+/blogtopics.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

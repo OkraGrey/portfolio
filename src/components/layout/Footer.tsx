@@ -30,7 +30,7 @@ export function Footer() {
             {site.links.location}
           </span>
         </div>
-        <div className="font-mono text-[12px] text-fainter">
+        <div className="font-mono text-[12px] text-subtle">
           © {site.year} {site.name} · Built with Next.js
         </div>
       </div>
