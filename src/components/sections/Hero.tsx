@@ -1,77 +1,71 @@
 import { Reveal } from "@/components/motion/Reveal";
+import { Button } from "@/components/ui/Button";
+import { Stat } from "@/components/ui/Stat";
+import { RotatingTagline } from "@/components/sections/RotatingTagline";
 import { site } from "@/lib/site";
 
 /**
- * Hero — full-viewport, centred. Type "denoises" in on load with a staggered
- * cadence; a fixed bottom rail carries location, prompt, and availability.
+ * Hero — full-viewport opener. The name "denoises" in on load, followed by a
+ * rotating tagline, a stats row, and two CTAs. A mono meta rail carries
+ * location + availability. The GenerativeField background is mounted by
+ * page.tsx behind <main>, so this section only renders foreground content.
  */
 export function Hero() {
-  const { tagline } = site;
+  const { hero } = site;
 
   return (
     <section
       id="top"
-      className="relative flex min-h-screen flex-col items-center justify-center px-5 text-center"
+      className="relative z-[2] flex min-h-[100svh] flex-col justify-center px-[clamp(20px,6vw,90px)] py-[clamp(56px,9vh,120px)]"
     >
+      <div className="flex flex-col gap-[clamp(24px,4vh,44px)]">
+        <Reveal
+          as="h1"
+          trigger="load"
+          delay={0.2}
+          blur={22}
+          y={26}
+          className="m-0 font-sans text-[clamp(46px,10vw,140px)] font-semibold leading-[0.95] tracking-tight text-foreground"
+        >
+          {hero.name}
+        </Reveal>
+
+        <Reveal as="div" trigger="load" delay={0.7}>
+          <RotatingTagline />
+        </Reveal>
+
+        <div className="flex flex-wrap gap-[clamp(20px,4vw,56px)]">
+          {hero.stats.map((stat, i) => (
+            <Reveal
+              key={stat.label}
+              as="div"
+              trigger="load"
+              delay={0.9 + i * 0.08}
+            >
+              <Stat value={stat.value} label={stat.label} />
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal as="div" trigger="load" delay={1.3} className="flex flex-wrap gap-4">
+          <Button href="#work" variant="primary">
+            See My Work
+          </Button>
+          <Button href="#contact" variant="ghost">
+            Let&apos;s Talk
+          </Button>
+        </Reveal>
+      </div>
+
       <Reveal
         as="div"
         trigger="load"
-        delay={0.6}
-        className="mb-[clamp(18px,3vh,30px)] font-mono text-[clamp(10px,1.05vw,12.5px)] tracking-[0.34em] text-primary-bright"
+        delay={1.6}
+        className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between px-[clamp(20px,6vw,90px)] py-6 font-mono text-[11px] uppercase tracking-[0.18em] text-subtle"
       >
-        {site.eyebrow.join("  ·  ")}
+        <span>{site.location}</span>
+        <span>{hero.availability}</span>
       </Reveal>
-
-      <Reveal
-        as="h1"
-        trigger="load"
-        delay={0.2}
-        blur={22}
-        y={26}
-        className="m-0 text-[clamp(46px,10vw,158px)] font-semibold uppercase leading-[0.92] tracking-[-0.045em] whitespace-nowrap"
-      >
-        {site.name}
-      </Reveal>
-
-      <Reveal
-        as="p"
-        trigger="load"
-        delay={1.05}
-        className="mt-[clamp(20px,3.4vh,34px)] max-w-[600px] text-[clamp(14px,1.5vw,19px)] font-light leading-[1.5] text-muted"
-      >
-        {tagline.lead}{" "}
-        <span className="font-normal text-foreground">{tagline.emphasis1}</span>{" "}
-        {tagline.mid}{" "}
-        <span className="font-normal text-foreground">{tagline.emphasis2}</span>
-        {tagline.trail}
-      </Reveal>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between px-[clamp(20px,4vw,52px)] py-6 font-mono text-[11px] tracking-[0.06em] text-faint">
-        <Reveal as="div" trigger="load" delay={1.9} className="leading-[1.9]">
-          <div>{site.location}</div>
-          <div>{site.org}</div>
-        </Reveal>
-
-        <Reveal
-          as="div"
-          trigger="load"
-          delay={2.05}
-          className="text-center"
-        >
-          <div className="mb-2 text-fainter">MOVE TO DISTURB THE FIELD</div>
-          <div className="mx-auto h-[26px] w-px bg-gradient-to-b from-primary to-transparent" />
-        </Reveal>
-
-        <Reveal
-          as="div"
-          trigger="load"
-          delay={1.9}
-          className="text-right leading-[1.9]"
-        >
-          <div className="text-primary-bright">● AVAILABLE</div>
-          <div>{site.year}</div>
-        </Reveal>
-      </div>
     </section>
   );
 }

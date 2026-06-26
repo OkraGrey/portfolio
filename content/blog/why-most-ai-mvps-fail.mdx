@@ -1,0 +1,53 @@
+---
+title: "Why Most AI MVPs Fail (And How to Ship One That Doesn't)"
+date: "2026-06-01"
+category: "AI Strategy"
+readingTime: "6 min"
+description: "A working demo is not a product. Here's the gap that kills most AI MVPs — and the framework I use to ship one in 30 days."
+---
+
+A founder shows me a Jupyter notebook. They run the top cell, wait a few seconds, and a near-perfect output appears. "It already works," they tell me. "We just need to wrap a UI around it and launch."
+
+Three months later, it still isn't live.
+
+This is the most common story in AI right now, and it almost never has anything to do with the model. The notebook genuinely does produce the right answer. The problem is that a notebook which produces the right answer once, for one input, on one laptop, with the engineer babysitting it, is not a product. It's a screenshot with extra steps. The distance between "it worked when I ran it" and "it works for a thousand users at once, at 2 a.m., when I'm asleep" is exactly where most AI budgets quietly die.
+
+## The demo trap
+
+The demo trap is seductive because the demo is the hard, interesting part — and it's also the part that's effectively done. When a model call returns something impressive, your brain rounds the remaining work to zero. But the impressive part was maybe 20% of the job. The other 80% is the unglamorous machinery that turns a clever response into something a stranger can pay for and rely on.
+
+I lived this directly on a project I now describe as Scale Architecture. The platform was feature-rich and demoed beautifully. Under real concurrent load it fell over: requests timed out, the event loop blocked, and there was no visibility into *why* anything was failing. The features hadn't changed. What was missing was everything around them. Getting it to actually hold up meant moving 172 blocking calls off the event loop, introducing a real job queue, and instrumenting the whole thing so failures became observable instead of mysterious. None of that work shows up in a demo. All of it is the difference between a screenshot and a business.
+
+If your AI MVP is stuck, it's almost never because the model isn't smart enough. It's because the demo was mistaken for the product.
+
+It helps to be honest about why the trap is so easy to fall into. The demo is the part you show investors, the part that gets the excited Slack message, the part that *feels* like progress. The plumbing — sessions, queues, retries, metering — is invisible when it works and only noticed when it doesn't. So teams optimize for the visible thing and starve the thing that actually determines whether they have a business. The fix isn't more demos. It's respecting the 80% that no one claps for.
+
+## What "production-ready" actually means
+
+When clients say "we just need to ship it," they're usually underestimating four specific things.
+
+**Authentication and access.** Someone has to log in. Sessions have to persist. Different users need to see their own data and not each other's. This sounds trivial until it isn't, and it gates everything else.
+
+**Scaling.** A single synchronous request that takes eight seconds is fine for a demo and fatal for a product. Real usage means asynchronous execution, job queues for anything slow, and an architecture that doesn't grind to a halt the moment two people click at the same time.
+
+**Error handling.** Models fail. APIs rate-limit you. Networks drop. A production system degrades gracefully and tells the user something useful; a demo throws a stack trace and stops.
+
+**Cost metering.** This is the one almost everyone skips, and it's the one I care about most. On a project I call Audience Insights, I can tell you that analyzing a single post costs between ten and thirty-eight cents. That number isn't a guess — it exists because the feature was instrumented from day one to track exactly what every call consumes. Here's the blunt version: if you can't tell me what a feature costs per call, it isn't ready to sell. You're flying a plane with no fuel gauge, and AI calls are expensive enough that the gauge matters.
+
+Production-ready isn't a vibe. It's these four things being handled, on purpose, before launch — not discovered in an incident afterward. And notice that none of them are about the model. You can swap a better model in later; you cannot retrofit a foundation under a product that's already on fire with real users on it.
+
+## The 30-day MVP framework
+
+So how do you actually ship one in a month without cutting the corners that matter? The discipline comes down to four commitments.
+
+**Ruthless scope.** Pick the single core loop that delivers the value, and ship *only* that, fully, before anything else gets touched. Most failed MVPs aren't under-built — they're spread thin across six half-finished features. One loop, working end to end, beats six demos every time.
+
+**Async architecture from day one.** Don't bolt on the job queue later under duress. Anything that calls a model or a slow API runs asynchronously from the first commit. Retrofitting async into a synchronous codebase — as I had to during Scale Architecture — is far more expensive than starting that way.
+
+**A real cost model before the first generation call.** Before writing the code that burns tokens, know roughly what each action will cost and what your unit economics look like. This shapes the product. Sometimes it tells you a feature is a bad idea before you've spent a dollar building it.
+
+**A clean handoff.** Clear code, real documentation, and a walkthrough so you actually own what you paid for. An MVP you can't maintain or extend is a liability dressed up as an asset.
+
+None of this is exotic. It's just the difference between treating AI as a magic trick and treating it as engineering. The model is the easy part now — the moat is everything around it.
+
+I build intelligence, and I ship it. If you've got a notebook that "already works" and a launch date that keeps slipping, [let's talk about closing the gap](/#contact).

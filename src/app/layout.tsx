@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
 import { Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { site } from "@/lib/site";
+import { defaultMetadata } from "@/lib/seo";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -17,18 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `${site.name} — AI Engineer`,
-  description:
-    "I build intelligence from first principles — diffusion, alignment, multimodal — and ship it to production.",
-  metadataBase: new URL("https://hasnainsohail.dev"),
-  openGraph: {
-    title: `${site.name} — AI Engineer`,
-    description:
-      "Generative · Multimodal · Agentic. Intelligence from first principles, shipped to production.",
-    type: "website",
-  },
-};
+export const metadata = defaultMetadata;
 
 export default function RootLayout({
   children,
@@ -40,7 +30,11 @@ export default function RootLayout({
       lang="en"
       className={`${sora.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
