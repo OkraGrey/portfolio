@@ -1,19 +1,24 @@
 import { GenerativeField } from "@/components/canvas/GenerativeField";
-import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { SelectedSystems } from "@/components/sections/SelectedSystems";
+import { ExpertiseCarousel } from "@/components/sections/ExpertiseCarousel";
+import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
+import { ProjectGrid } from "@/components/sections/ProjectGrid";
+import { BlogPreview } from "@/components/sections/BlogPreview";
+import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen cursor-crosshair bg-ink text-foreground">
+    <div className="relative cursor-crosshair bg-ink text-foreground">
+      {/* Generative denoising field — homepage background only */}
       <GenerativeField />
-      <Navbar />
-      <main className="relative z-[2]">
-        <Hero />
-        <SelectedSystems />
-        <Contact />
-      </main>
+      <Hero />
+      <ExpertiseCarousel />
+      <FeaturedProjects />
+      <ProjectGrid />
+      <BlogPreview />
+      <About />
+      <Contact />
     </div>
   );
 }

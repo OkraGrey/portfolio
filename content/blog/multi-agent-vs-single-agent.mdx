@@ -1,0 +1,47 @@
+---
+title: "Multi-Agent vs Single Agent: When Each Makes Sense"
+date: "2026-06-20"
+category: "Building AI Products"
+readingTime: "7 min"
+description: "Everyone wants 'AI agents' now. Most products need exactly one LLM call. Here's how to tell the difference — using two systems I built."
+---
+
+"Agents" is the word everyone reaches for right now. Founders want them, investors ask about them, and a lot of teams are quietly turning a one-week feature into a one-month project trying to build one before they've checked whether they need it.
+
+Here's the uncomfortable truth I tell most clients: the majority of AI features you can imagine need exactly one well-prompted call to a model. Not an orchestra of agents. One call. Reaching for a multi-agent system first is one of the most common — and most expensive — mistakes I see in AI product development.
+
+But sometimes you genuinely do need agents, and when you do, nothing else will work as cleanly. The skill is telling the two situations apart. Let me make this concrete with two systems I actually built.
+
+## What a multi-agent system actually is
+
+Strip away the jargon and it's simple. A single-agent system is one AI doing the whole job: you hand it a prompt, it reasons, it answers. A multi-agent system splits the job into specialists, each responsible for one thing, handing off to each other to get to the result.
+
+The analogy I use is a team versus a generalist. A talented generalist can handle a surprising amount on their own — and for most tasks, that's exactly who you want, because coordinating a team has overhead. You only assemble a team when the work genuinely splits into distinct roles that benefit from focus and separation. Same with agents. Most of the time, the generalist — one strong prompt — is the right call. The team is for when the job is actually several different jobs wearing a trench coat.
+
+The failure mode is reaching for the team first. You add agents because it feels more sophisticated, and now you've got more moving parts, more latency, and more places to break, all to do something one prompt could have handled.
+
+There's a second, quieter cost too: debuggability. When one prompt misbehaves, you tweak one prompt. When a five-agent system produces a bad result, you have to figure out *which* agent went wrong, whether it was the hand-off, or whether the upstream agent fed it garbage. Every agent you add multiplies the number of explanations for any given failure. That's fine when the agents are earning their keep. It's pure tax when they aren't.
+
+## When you genuinely need agents
+
+The signal that tips me toward a multi-agent design is this: **multiple distinct reasoning steps operating over multiple data sources**, where each step has its own job and its own way of failing. When that's true, splitting the work isn't over-engineering — it's the clean design.
+
+Take a project I call Creator Recommender. The job is: given a creator's social handle, recommend the visual styles that match their brand. That sounds like one task, but it's really four. First, scrape the creator's social presence. Second, derive a brand identity from what you find. Third, map that identity onto a taxonomy of 91 styles. Fourth, rank the matches and explain the reasoning. Each of those is a genuinely different operation over genuinely different data. Trying to cram all four into one mega-prompt produces a brittle, hard-to-debug mess where a failure anywhere poisons everything. As a pipeline of focused steps, each stage is testable, swappable, and clear. This is a real agent system, and it earns its complexity.
+
+Then there's PrimePal, an AI tutor deployed for primary school students in rural Pakistan. It runs on three agents: a Curriculum Guardrail that keeps every interaction on-syllabus and age-appropriate, a Tutor that actually teaches, and an Evaluator that measures whether the student understood. I split these on purpose, because they are three different jobs with three different failure modes. Staying on-curriculum is a *safety* concern. Teaching well is a *pedagogy* concern. Measuring understanding is an *assessment* concern. Collapse them into one agent and you make all three worse — the model that's trying to be encouraging is a poor judge of whether real learning happened, and the model policing the syllabus is a stiff teacher. Separation lets each agent be excellent at one thing.
+
+In both cases, the agents aren't there for sophistication points. They're there because the work was already multiple jobs, and the architecture just made that honest.
+
+## The cost and complexity tradeoff
+
+Every agent you add is another model call. That means more latency, more money per run, more surface area for bugs, and more to reason about when something goes wrong. A single-agent feature has one place to look when it misbehaves. A four-agent pipeline has four, plus the hand-offs between them. That cost is real and you pay it on every single request, forever.
+
+So here's the decision rule I actually use:
+
+- **Start with one call.** Always. Write the single best prompt you can and see how far it gets you. It's usually further than people expect.
+- **Add an agent only when a step has a distinct job, distinct data, or a distinct failure mode you need to isolate.** Those are the three triggers. If none of them apply, you don't have a second agent — you have a longer prompt.
+- **Stop adding agents the moment the next one doesn't clear that bar.** Complexity is a cost, not a feature.
+
+The builder's bias should always be toward the simplest thing that ships and holds up. Agents are a powerful tool, and when the problem is genuinely several problems — like Creator Recommender or PrimePal — they're the right one. But "we're using agents" is not a product strategy. Solving the user's problem with the least machinery that works is.
+
+If you're trying to figure out whether your product needs one call or a coordinated system — and how to build it so it survives real users — [let's talk](/#contact).

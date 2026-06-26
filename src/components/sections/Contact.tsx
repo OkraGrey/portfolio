@@ -1,56 +1,99 @@
+import { Mail, MapPin } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/ui/BrandIcons";
 import { Reveal } from "@/components/motion/Reveal";
+import { Section } from "@/components/ui/Section";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { site } from "@/lib/site";
 
-const CHANNELS = [
-  { label: `${site.links.email} ↗`, href: `mailto:${site.links.email}` },
-  { label: `${site.links.githubLabel} ↗`, href: site.links.github },
-  { label: "fiverr ↗", href: site.links.fiverr },
-];
+/** Contact channels rendered below the form. Internal = mailto, others external. */
+const CONTACT_LINKS = [
+  {
+    icon: Mail,
+    label: site.links.email,
+    href: `mailto:${site.links.email}`,
+    external: false,
+  },
+  {
+    icon: LinkedinIcon,
+    label: "LinkedIn",
+    href: site.links.linkedin,
+    external: true,
+  },
+  {
+    icon: GithubIcon,
+    label: site.links.githubLabel,
+    href: site.links.github,
+    external: true,
+  },
+  {
+    icon: MapPin,
+    label: site.links.location,
+    href: null,
+    external: false,
+  },
+] as const;
 
 /**
- * Contact — closing call to action with the available channels and footer.
+ * Contact — closing call to action: headline + subtext, the contact form, and
+ * a row of direct channels (email, LinkedIn, GitHub, location).
  */
 export function Contact() {
   return (
-    <section
-      id="contact"
-      className="relative flex flex-col justify-center px-[clamp(20px,6vw,90px)] pb-[60px] pt-[110px]"
-    >
-      <Reveal
-        as="h2"
-        y={20}
-        className="mb-10 text-[clamp(32px,6vw,86px)] font-semibold leading-[0.96] tracking-[-0.03em]"
-      >
-        Let&rsquo;s build something
-        <br />
-        from first principles.
-      </Reveal>
+    <Section id="contact">
+      <div className="mx-auto max-w-[680px]">
+        <Reveal
+          as="h2"
+          className="font-sans text-[clamp(28px,5vw,52px)] font-semibold leading-[1.05] text-foreground"
+        >
+          {site.contact.headline}
+        </Reveal>
+        <Reveal
+          as="p"
+          delay={0.08}
+          className="mt-4 text-[clamp(15px,1.6vw,18px)] leading-[1.6] text-muted"
+        >
+          {site.contact.subtext}
+        </Reveal>
 
-      <Reveal
-        as="div"
-        delay={0.1}
-        className="flex flex-wrap gap-x-10 gap-y-3.5 font-mono text-[13px] tracking-[0.04em]"
-      >
-        {CHANNELS.map((c) => {
-          const external = c.href.startsWith("http");
-          return (
-            <a
-              key={c.href}
-              href={c.href}
-              {...(external
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
-              className="text-[#cfd4e4] no-underline transition-colors hover:text-primary-bright"
-            >
-              {c.label}
-            </a>
-          );
-        })}
-      </Reveal>
+        <Reveal delay={0.16} className="mt-[clamp(28px,5vw,48px)]">
+          <ContactForm />
+        </Reveal>
 
-      <div className="mt-[70px] border-t border-white/8 pt-6 font-mono text-[11px] text-fainter">
-        © {site.year} {site.name.toUpperCase()} — designed from noise.
+        <Reveal
+          delay={0.24}
+          className="mt-[clamp(28px,5vw,48px)] flex flex-wrap gap-x-8 gap-y-4 border-t border-line pt-6"
+        >
+          {CONTACT_LINKS.map(({ icon: Icon, label, href, external }) => {
+            const content = (
+              <>
+                <Icon aria-hidden className="h-4 w-4 text-primary-bright" />
+                <span>{label}</span>
+              </>
+            );
+            const className =
+              "inline-flex items-center gap-2 text-[14px] text-muted transition-colors hover:text-foreground";
+            if (!href) {
+              return (
+                <span key={label} className={className}>
+                  {content}
+                </span>
+              );
+            }
+            return (
+              <a
+                key={label}
+                href={href}
+                className={className}
+                {...(external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {content}
+              </a>
+            );
+          })}
+        </Reveal>
       </div>
-    </section>
+    </Section>
   );
 }
