@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { asset } from "@/lib/asset";
 import { blogAccent, chipStyle } from "@/lib/category";
 import { cn } from "@/lib/cn";
 import { formatPostDate, type PostMeta } from "@/lib/blog";
@@ -23,7 +24,7 @@ export function BlogCard({
       className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-white/10 bg-surface no-underline transition-[transform,border-color,box-shadow] duration-[250ms] hover:-translate-y-[5px] hover:border-white/[0.22] hover:shadow-[0_28px_55px_-28px_rgba(0,0,0,0.9)]"
     >
       <Image
-        src={`/images/blog/${slug}/cover.webp`}
+        src={asset(`/images/blog/${slug}/cover.webp`)}
         width={1200}
         height={630}
         alt=""

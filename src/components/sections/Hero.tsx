@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Stat } from "@/components/ui/Stat";
 import { site } from "@/lib/site";
 import { about } from "@/lib/about";
+import { asset } from "@/lib/asset";
 
 /** Top hairline accent per stat cell: emerald · indigo · pink · amber. */
 const STAT_ACCENTS = ["#2fe0b0", "#7782ff", "#ff5c93", "#ffb74d"];
@@ -33,7 +34,7 @@ export function Hero() {
         >
           <div className="overflow-hidden rounded-[20px] border border-white/[0.12] bg-[linear-gradient(155deg,#11161f,#0a0d14)]">
             <Image
-              src={about.photo}
+              src={asset(about.photo)}
               width={800}
               height={800}
               alt="Hasnain Sohail"
