@@ -2,13 +2,13 @@ import { Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { defaultMetadata } from "@/lib/seo";
 import { Navbar } from "@/components/layout/Navbar";
-import { DevBanner } from "@/components/layout/DevBanner";
 import { Footer } from "@/components/layout/Footer";
+import { GenerativeField } from "@/components/canvas/GenerativeField";
 
 const sora = Sora({
   variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -32,8 +32,9 @@ export default function RootLayout({
       className={`${sora.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full">
+        {/* Generative denoising field — fixed background on every route. */}
+        <GenerativeField />
         <Navbar />
-        <DevBanner />
         <main>{children}</main>
         <Footer />
       </body>

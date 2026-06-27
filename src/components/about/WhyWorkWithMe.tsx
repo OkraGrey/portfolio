@@ -1,22 +1,31 @@
 import { Reveal } from "@/components/motion/Reveal";
-import { Card } from "@/components/ui/Card";
 import { about } from "@/lib/about";
 
+/** Top hairline accent per card: emerald · indigo · pink · amber. */
+const WHY_ACCENTS = ["#2fe0b0", "#7782ff", "#ff5c93", "#ffb74d"];
+
 /**
- * "Why work with me" value props — a four-up grid of cards, each revealed on a
- * short stagger. Server component; pure content render.
+ * "Why work with me" value props — a four-up grid of surface cards with a
+ * colored top hairline, each revealed on a short stagger.
  */
 export function WhyWorkWithMe() {
   return (
-    <div className="grid gap-[clamp(14px,2vw,22px)] sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-[clamp(14px,1.6vw,18px)] [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]">
       {about.whyCards.map((card, i) => (
-        <Reveal key={card.title} delay={i * 0.08}>
-          <Card className="h-full">
-            <h3 className="mb-2 font-sans text-[clamp(17px,1.8vw,20px)] font-medium text-foreground">
+        <Reveal key={card.title} delay={(i % 4) * 0.06}>
+          <div
+            className="flex h-full flex-col gap-2.5 rounded-2xl border border-white/10 bg-surface p-6"
+            style={{
+              borderTop: `2px solid ${WHY_ACCENTS[i % WHY_ACCENTS.length]}`,
+            }}
+          >
+            <h3 className="font-sans text-[17px] font-semibold text-[#f3f5fb]">
               {card.title}
             </h3>
-            <p className="text-[15px] leading-[1.6] text-muted">{card.copy}</p>
-          </Card>
+            <p className="text-[14px] leading-[1.55] text-[#b6bdcc]">
+              {card.copy}
+            </p>
+          </div>
         </Reveal>
       ))}
     </div>

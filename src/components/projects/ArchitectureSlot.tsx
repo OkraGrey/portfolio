@@ -17,7 +17,7 @@ export function ArchitectureSlot({ project }: ArchitectureSlotProps) {
     : "Architecture diagram coming soon";
 
   return (
-    <div className="grid aspect-[16/9] place-items-center rounded-2xl border border-dashed border-line font-mono text-[12px] text-subtle">
+    <div className="grid aspect-[16/9] place-items-center rounded-2xl border border-dashed border-white/[0.18] font-mono text-[12px] tracking-[0.08em] text-subtle">
       {message}
     </div>
   );

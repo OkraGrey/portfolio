@@ -11,10 +11,10 @@ interface CardProps {
 }
 
 const BASE =
-  "relative rounded-2xl border border-line bg-[#0b0d12]/60 backdrop-blur-sm p-[clamp(18px,2.4vw,28px)]";
+  "relative rounded-[18px] border border-line bg-surface p-[clamp(18px,2.4vw,28px)]";
 
 const INTERACTIVE =
-  "transition-transform transition-shadow duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_50px_-20px_rgba(110,123,255,0.45)]";
+  "transition-transform transition-shadow duration-[250ms] hover:-translate-y-1 hover:border-white/[0.22] hover:shadow-[0_28px_55px_-28px_rgba(0,0,0,0.9)]";
 
 /** Surface shell used by project, expertise, blog, and value-prop cards. */
 export function Card({ children, href, interactive, className }: CardProps) {

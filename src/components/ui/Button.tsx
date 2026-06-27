@@ -22,15 +22,15 @@ const BASE =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60";
 
 const SIZES = {
-  md: "px-6 py-3 text-[15px]",
-  sm: "px-4 py-2 text-[13px]",
+  md: "px-[26px] py-[13px] text-[15px]",
+  sm: "px-[18px] py-[9px] text-[14px]",
 } as const;
 
 const VARIANTS = {
   primary:
-    "bg-primary text-ink shadow-[0_0_0_1px_rgba(110,123,255,0.4)] hover:bg-primary-bright hover:shadow-[0_8px_30px_-8px_rgba(124,132,255,0.6)]",
+    "text-ink bg-[linear-gradient(135deg,#8b94ff,#7782ff)] shadow-[0_0_0_1px_rgba(119,130,255,0.5),0_14px_40px_-16px_rgba(119,130,255,0.8)] hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(119,130,255,0.7),0_20px_50px_-16px_rgba(119,130,255,0.95)]",
   ghost:
-    "border border-line text-foreground hover:border-primary/50 hover:text-primary-bright",
+    "border border-white/25 font-medium text-foreground hover:border-primary/70 hover:bg-primary/[0.06] hover:text-primary-bright",
 } as const;
 
 /**

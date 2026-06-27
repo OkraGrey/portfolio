@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import type { EmblaCarouselType } from "embla-carousel";
@@ -36,16 +36,21 @@ export function Carousel({
   ariaLabel,
 }: CarouselProps) {
   const reduced = useReducedMotion();
-  const plugins =
-    autoplayDelay && !reduced
-      ? [
-          Autoplay({
-            delay: autoplayDelay,
-            stopOnInteraction: false,
-            stopOnMouseEnter: true,
-          }),
-        ]
-      : [];
+  // Memoized so the autoplay instance is stable across renders (recreating it
+  // on every render stalls playback).
+  const plugins = useMemo(
+    () =>
+      autoplayDelay && !reduced
+        ? [
+            Autoplay({
+              delay: autoplayDelay,
+              stopOnInteraction: false,
+              stopOnMouseEnter: true,
+            }),
+          ]
+        : [],
+    [autoplayDelay, reduced],
+  );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop, align: "start", dragFree: false },

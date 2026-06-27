@@ -8,7 +8,7 @@ import type { ComponentPropsWithoutRef } from "react";
 export const mdxComponents = {
   h2: (props: ComponentPropsWithoutRef<"h2">) => (
     <h2
-      className="mt-12 mb-4 font-sans text-[clamp(22px,3vw,30px)] font-semibold text-foreground"
+      className="mt-12 mb-4 font-sans text-[clamp(22px,3vw,28px)] font-semibold text-foreground"
       {...props}
     />
   ),
@@ -19,7 +19,7 @@ export const mdxComponents = {
     />
   ),
   p: (props: ComponentPropsWithoutRef<"p">) => (
-    <p className="mb-5 text-[17px] leading-[1.7] text-muted" {...props} />
+    <p className="mb-5 text-[17px] leading-[1.75] text-muted" {...props} />
   ),
   ul: (props: ComponentPropsWithoutRef<"ul">) => (
     <ul className="mb-5 list-disc space-y-2 pl-6 text-muted" {...props} />

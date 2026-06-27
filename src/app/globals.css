@@ -1,33 +1,57 @@
 @import "tailwindcss";
 
 /*
-  Design tokens for the "Motion Concept" — a dark, generative-AI portfolio.
-  Palette: near-black ink, indigo primary, warm-pink accent, cool greys.
+  Design tokens — "Portfolio Revamp" (Claude Design source of truth).
+  A dark, generative-AI portfolio built on a four-accent categorical system:
+  indigo · emerald · pink · amber. Near-black ink ground, layered card
+  surfaces, and a cool neutral type ramp.
 */
 @theme {
+  /* Ground + layered card surfaces */
   --color-ink: #060709;
-  --color-foreground: #f4f6fb;
+  --color-surface: #0e121b; /* primary card background */
+  --color-surface-2: #0b0e15; /* hero stat cells */
+  --color-surface-3: #0a0d14; /* project cover ground */
 
-  --color-primary: #6e7bff;
-  --color-primary-bright: #7c84ff;
-  --color-accent: #ff9ecd;
+  /* Neutral type ramp */
+  --color-foreground: #f4f7fd;
+  --color-bright: #f7f9fe; /* headings */
+  --color-muted: #c6cdda; /* body copy */
+  --color-muted-2: #bcc3d2; /* card descriptions */
+  --color-subtle: #8b93a6; /* mono labels */
+  --color-faint: #9aa2b4; /* inactive tabs */
+  --color-fainter: #6b7180; /* footer */
+  --color-line: rgba(255, 255, 255, 0.1);
 
-  --color-bright: #eef1f8;
-  --color-muted: #aeb4c6;
-  --color-muted-2: #9aa0b0;
-  --color-subtle: #7d8395;
-  --color-faint: #6b7180;
-  --color-fainter: #565c6b;
-  --color-line: rgba(255, 255, 255, 0.09);
+  /* Indigo — primary */
+  --color-primary: #7782ff;
+  --color-primary-bright: #a3aaff;
+  --color-primary-grad: #8b94ff;
+  --color-indigo-cat: #7c8bff;
+
+  /* Emerald */
+  --color-emerald: #2fe0b0;
+  --color-emerald-bright: #5fe9c6;
+
+  /* Pink */
+  --color-pink: #ff5c93;
+  --color-pink-bright: #ff86b0;
+  --color-accent: #ff5c93; /* legacy alias (mdx / contact links) */
+
+  /* Amber */
+  --color-amber: #ffb74d;
+  --color-amber-bright: #ffc879;
 
   --font-sans: var(--font-sora), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
+/*
+  No global `scroll-behavior: smooth` — it makes Next.js's scroll-to-top on
+  route navigation animate (the page visibly scrolls up when you open a project
+  or post). Navigations should jump instantly; the route fade is the only
+  transition. In-page anchors jump instantly too.
+*/
 body {
   background: var(--color-ink);
   color: var(--color-foreground);
@@ -41,8 +65,15 @@ body {
   color: #fff;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+/* Availability badge / status dot pulse (emerald). */
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(47, 224, 176, 0.5);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 6px rgba(47, 224, 176, 0);
   }
 }

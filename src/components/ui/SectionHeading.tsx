@@ -7,6 +7,12 @@ interface SectionHeadingProps {
   kicker?: string;
   align?: "left" | "center";
   as?: "h1" | "h2";
+  /** Eyebrow color (CSS color). Defaults to the indigo bright token. */
+  eyebrowColor?: string;
+  /** Bottom-margin utility (literal class). */
+  mb?: string;
+  /** Title size utility (literal class), overriding the default scale. */
+  titleClassName?: string;
 }
 
 /**
@@ -19,12 +25,16 @@ export function SectionHeading({
   kicker,
   align = "left",
   as = "h2",
+  eyebrowColor = "var(--color-primary-bright)",
+  mb = "mb-[clamp(34px,5vh,56px)]",
+  titleClassName = "text-[clamp(32px,5.5vw,60px)]",
 }: SectionHeadingProps) {
   const center = align === "center";
   return (
     <div
       className={cn(
-        "mb-[clamp(28px,5vh,56px)] flex flex-col gap-3",
+        "flex flex-col gap-3.5",
+        mb,
         center ? "items-center text-center" : "items-start text-left",
       )}
     >
@@ -32,7 +42,8 @@ export function SectionHeading({
         <Reveal
           as="div"
           delay={0}
-          className="font-mono text-[clamp(10px,1.05vw,12.5px)] uppercase tracking-[0.22em] text-primary-bright"
+          style={{ color: eyebrowColor }}
+          className="font-mono text-[12px] uppercase tracking-[0.22em]"
         >
           {eyebrow}
         </Reveal>
@@ -40,7 +51,10 @@ export function SectionHeading({
       <Reveal
         as={as}
         delay={0.08}
-        className="font-sans text-[clamp(32px,6vw,64px)] font-semibold leading-[1.04] text-foreground"
+        className={cn(
+          "font-sans font-bold leading-[1.03] tracking-[-0.02em] text-bright",
+          titleClassName,
+        )}
       >
         {title}
       </Reveal>

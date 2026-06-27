@@ -2,19 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 /**
  * Global navigation. Hash targets are written as "/#anchor" so they resolve
- * from any route (sub-pages navigate home, then scroll). Frosts and tightens
- * once the page scrolls past the hero. Collapses to a sheet menu on mobile.
+ * from any route (sub-pages navigate home, then scroll). A frosted bar with a
+ * gradient "HS" mark; collapses to a sheet menu on mobile. Gains a subtle
+ * shadow + tighter padding once the page scrolls past the hero.
  */
 const NAV_LINKS = [
-  { label: "Work", href: "/#work" },
   { label: "Expertise", href: "/#expertise" },
+  { label: "Work", href: "/#work" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/#about" },
 ];
@@ -41,46 +40,35 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 backdrop-blur-[13px] backdrop-saturate-150 transition-[background-color,padding,border-color,box-shadow] duration-[450ms] ease-out",
+        "fixed inset-x-0 top-0 z-50 border-b bg-[rgba(7,8,12,0.72)] backdrop-blur-[14px] backdrop-saturate-150 transition-[padding,border-color,box-shadow] duration-[450ms] ease-out",
         scrolled
-          ? "border-b border-white/10 bg-[rgba(8,9,14,0.66)] shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)]"
-          : "border-b border-white/5 bg-[rgba(8,9,14,0.22)]",
+          ? "border-white/10 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)]"
+          : "border-white/[0.07]",
       )}
     >
       <div
         className={cn(
-          "flex items-center justify-between px-[clamp(20px,4vw,52px)] transition-[padding] duration-[450ms] ease-out",
-          scrolled ? "py-3" : "py-[18px]",
+          "flex items-center justify-end px-[clamp(20px,5vw,72px)] transition-[padding] duration-[450ms] ease-out",
+          scrolled ? "py-3" : "py-4",
         )}
       >
-        <Link
-          href="/"
-          className="flex items-center gap-[11px] font-mono text-[13px] tracking-[0.04em] text-bright no-underline"
-        >
-          <motion.span
-            aria-hidden="true"
-            className="inline-block h-2 w-2 rounded-full bg-primary"
-            style={{ boxShadow: "0 0 12px var(--color-primary)" }}
-            animate={{ opacity: [1, 0.45, 1], scale: [1, 0.85, 1] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-          />
-          HASNAIN&nbsp;SOHAIL
-        </Link>
-
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-[clamp(16px,2.4vw,30px)] md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="font-mono text-[11.5px] uppercase tracking-[0.12em] text-muted-2 no-underline transition-colors hover:text-foreground"
+              className="rounded-lg px-[14px] py-2 text-[14px] font-medium text-[#e6e9f2] no-underline transition-colors hover:text-white"
             >
               {link.label}
             </Link>
           ))}
-          <Button href="/#contact" variant="primary" size="sm">
-            Contact
-          </Button>
+          <Link
+            href="/#contact"
+            className="ml-1.5 rounded-full bg-[#f4f7fd] px-[18px] py-[9px] text-[14px] font-semibold text-[#07080c] no-underline transition-[transform,box-shadow] duration-200 hover:-translate-y-px hover:shadow-[0_10px_28px_-10px_rgba(244,247,253,0.5)]"
+          >
+            Let&apos;s talk
+          </Link>
         </nav>
 
         {/* Mobile toggle */}
@@ -100,29 +88,25 @@ export function Navbar() {
       {open && (
         <nav
           id="mobile-menu"
-          className="flex flex-col gap-1 border-t border-white/10 bg-[rgba(8,9,14,0.92)] px-[clamp(20px,4vw,52px)] py-4 md:hidden"
+          className="flex flex-col gap-1 border-t border-white/10 bg-[rgba(8,9,14,0.92)] px-[clamp(20px,5vw,72px)] py-4 md:hidden"
         >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="rounded-lg px-2 py-3 font-mono text-[13px] uppercase tracking-[0.12em] text-muted-2 transition-colors hover:bg-white/5 hover:text-foreground"
+              className="rounded-lg px-2 py-3 text-[15px] font-medium text-[#e6e9f2] transition-colors hover:bg-white/5 hover:text-white"
             >
               {link.label}
             </Link>
           ))}
-          <div className="px-2 pt-2">
-            <Button
-              href="/#contact"
-              variant="primary"
-              size="sm"
-              onClick={() => setOpen(false)}
-              className="w-full"
-            >
-              Contact
-            </Button>
-          </div>
+          <Link
+            href="/#contact"
+            onClick={() => setOpen(false)}
+            className="mt-1 rounded-full bg-[#f4f7fd] px-5 py-3 text-center text-[15px] font-semibold text-[#07080c] no-underline"
+          >
+            Let&apos;s talk
+          </Link>
         </nav>
       )}
     </header>
