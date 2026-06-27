@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ACCENT_HEX, PROJECT_ACCENT, chipStyle, hexA } from "@/lib/category";
+import { asset } from "@/lib/asset";
 import { cn } from "@/lib/cn";
 import type { Project } from "@/lib/projects";
 
@@ -29,7 +30,7 @@ export function ProjectCover({
       )}
     >
       <Image
-        src={p.image.hero ?? p.image.card}
+        src={asset(p.image.hero ?? p.image.card)}
         alt=""
         fill
         sizes={sizes ?? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw"}

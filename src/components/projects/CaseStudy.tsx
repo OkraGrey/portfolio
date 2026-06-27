@@ -13,6 +13,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ArchitectureSlot } from "@/components/projects/ArchitectureSlot";
 import { ProjectNav } from "@/components/projects/ProjectNav";
 import { chipStyle, projectAccent } from "@/lib/category";
+import { asset } from "@/lib/asset";
 import type { Project } from "@/lib/projects";
 
 /** Mono uppercase section label, rendered as the section's <h2>. */
@@ -66,7 +67,7 @@ export function CaseStudy({ project }: CaseStudyProps) {
 
       <Reveal as="div" delay={0.2} className="mt-7">
         <Image
-          src={project.image.hero ?? project.image.card}
+          src={asset(project.image.hero ?? project.image.card)}
           alt=""
           width={1280}
           height={720}
