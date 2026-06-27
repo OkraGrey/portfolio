@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CaseStudy } from "@/components/projects/CaseStudy";
+import { InstantMotion } from "@/components/motion/InstantMotion";
 import { getProject, projects } from "@/lib/projects";
 import { SITE_URL, ogImageUrl } from "@/lib/seo";
 
@@ -49,10 +50,12 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   return (
-    <main className="relative z-[2] px-[clamp(20px,6vw,90px)] pb-[80px] pt-[120px]">
-      <div className="mx-auto w-full max-w-[820px]">
-        <CaseStudy project={project} />
-      </div>
-    </main>
+    <InstantMotion>
+      <main className="relative z-[2] px-[clamp(20px,5vw,40px)] pb-[80px] pt-[clamp(96px,13vh,120px)]">
+        <div className="mx-auto w-full max-w-[820px]">
+          <CaseStudy project={project} />
+        </div>
+      </main>
+    </InstantMotion>
   );
 }

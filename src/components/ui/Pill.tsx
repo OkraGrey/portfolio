@@ -22,11 +22,11 @@ export function Pill({
   className,
 }: PillProps) {
   const variants: Record<NonNullable<PillProps["variant"]>, string> = {
-    outline: "border border-line text-muted",
+    outline: "border border-white/[0.14] text-faint",
     solid: "border border-primary/30 bg-primary/12 text-primary-bright",
     category: active
-      ? "border border-primary bg-primary text-ink"
-      : "border border-line text-subtle transition-colors hover:text-foreground",
+      ? "border border-[#f4f7fd] bg-[#f4f7fd] font-medium text-ink"
+      : "border border-white/[0.14] text-faint transition-colors hover:text-foreground",
   };
   return (
     <span className={cn(BASE, variants[variant], className)}>{children}</span>

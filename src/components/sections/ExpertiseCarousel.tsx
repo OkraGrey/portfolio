@@ -5,15 +5,22 @@ import { ExpertiseCard } from "@/components/expertise/ExpertiseCard";
 import { expertise } from "@/lib/expertise";
 
 /**
- * ExpertiseCarousel — "What I Build". A 3-up (peek on mobile) autoplaying
- * carousel of capability cards, each linking to a representative case study.
+ * Expertise — "What I Build". A single-row, 3-up (peek on mobile) autoplaying
+ * carousel of capability cards, each with an accent icon tile and a link to a
+ * representative case study.
  */
 export function ExpertiseCarousel() {
   return (
-    <Section id="expertise">
-      <SectionHeading eyebrow="EXPERTISE" title="What I Build" />
+    <Section id="expertise" padY="py-[clamp(60px,9vh,110px)]">
+      <SectionHeading
+        eyebrow="/ Expertise"
+        eyebrowColor="#2fe0b0"
+        title="What I Build"
+      />
       <Carousel
-        autoplayDelay={5000}
+        autoplayDelay={2000}
+        showArrows
+        showDots
         ariaLabel="Expertise areas"
         slideClassName="basis-[85%] sm:basis-[55%] lg:basis-[33.333%] pr-4"
       >

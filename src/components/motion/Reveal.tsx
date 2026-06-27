@@ -1,5 +1,6 @@
 "use client";
 
+import { createContext, useContext } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { ComponentType, ReactNode } from "react";
 
@@ -10,8 +11,13 @@ import type { ComponentType, ReactNode } from "react";
  *  - `trigger="load"`  animates on mount (hero, navbar).
  *  - `trigger="inView"` animates when scrolled into view (default).
  *
- * Honours `prefers-reduced-motion` by rendering content immediately.
+ * Honours `prefers-reduced-motion`, and any subtree wrapped in InstantMotion
+ * (via the InstantReveal context) renders content immediately with no
+ * animation — used on sub-pages where the route transition is the entrance.
  */
+
+/** When true (provided by InstantMotion), Reveals render statically. */
+export const InstantReveal = createContext(false);
 
 type RevealTag =
   | "div"
@@ -64,15 +70,23 @@ export function Reveal({
   ...rest
 }: RevealProps) {
   const reduce = useReducedMotion();
+  const instant = useContext(InstantReveal);
 
   // motion exposes a motion-enabled component per intrinsic tag.
   const Component = motion[as] as ComponentType<Record<string, unknown>>;
 
-  const hidden = reduce
-    ? { opacity: 1 }
-    : { opacity: 0, y, filter: `blur(${blur}px)` };
+  // Opt-out via context (InstantMotion) is SSR-safe — the value is identical on
+  // server and client — so we can drop the animation entirely for sub-pages.
+  if (instant) {
+    return <Component {...rest}>{children}</Component>;
+  }
+
+  const hidden = { opacity: 0, y, filter: `blur(${blur}px)` };
   const shown = { opacity: 1, y: 0, filter: "blur(0px)" };
 
+  // initial/animate stay constant across server + client; only the timing reacts
+  // to reduced-motion (which differs between server and a reduced-motion client),
+  // so the SSR'd hidden state always matches the client's initial state.
   const transition = {
     duration: reduce ? 0 : duration,
     delay: reduce ? 0 : delay,

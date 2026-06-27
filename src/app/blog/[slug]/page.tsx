@@ -3,12 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Section } from "@/components/ui/Section";
-import { Pill } from "@/components/ui/Pill";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { InstantMotion } from "@/components/motion/InstantMotion";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { ShareButtons } from "@/components/blog/ShareButtons";
 import { mdxComponents } from "@/components/blog/mdxComponents";
+import { blogAccent, chipStyle } from "@/lib/category";
 import {
   getAllPostMeta,
   getOtherPosts,
@@ -70,23 +71,29 @@ export default async function BlogPostPage({
   const more = getOtherPosts(slug, 2);
 
   return (
-    <Section className="pt-[clamp(96px,16vh,160px)]">
-      <div className="mx-auto w-full max-w-[760px]">
+    <InstantMotion>
+      <Section className="pt-[clamp(96px,16vh,160px)]">
+        <div className="mx-auto w-full max-w-[760px]">
         <Link
           href="/blog"
-          className="font-mono text-[12px] uppercase tracking-[0.14em] text-subtle transition-colors hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full border border-white/[0.22] px-3.5 py-2 font-mono text-[12px] uppercase tracking-[0.14em] text-[#d2d8e4] no-underline transition-colors hover:border-white/40 hover:text-white"
         >
           ← All Posts
         </Link>
 
         <header className="mt-8 flex flex-col gap-5">
           <Reveal as="div" delay={0}>
-            <Pill variant="solid">{meta.category}</Pill>
+            <span
+              className="inline-flex self-start rounded-full px-[14px] py-1.5 font-mono text-[11px] uppercase tracking-[0.12em]"
+              style={chipStyle(blogAccent(meta.category))}
+            >
+              {meta.category}
+            </span>
           </Reveal>
           <Reveal
             as="h1"
             delay={0.08}
-            className="font-sans text-[clamp(30px,5.5vw,52px)] font-semibold leading-[1.06] text-foreground"
+            className="font-sans text-[clamp(30px,5.5vw,52px)] font-bold leading-[1.07] tracking-[-0.02em] text-bright"
           >
             {meta.title}
           </Reveal>
@@ -112,7 +119,7 @@ export default async function BlogPostPage({
             <div className="grid grid-cols-1 gap-[clamp(16px,2.4vw,28px)] sm:grid-cols-2">
               {more.map((p, i) => (
                 <Reveal key={p.slug} delay={i * 0.08}>
-                  <BlogCard post={p} />
+                  <BlogCard post={p} compact />
                 </Reveal>
               ))}
             </div>
@@ -125,6 +132,7 @@ export default async function BlogPostPage({
           </Button>
         </div>
       </div>
-    </Section>
+      </Section>
+    </InstantMotion>
   );
 }

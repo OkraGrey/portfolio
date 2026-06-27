@@ -1,4 +1,3 @@
-import { GenerativeField } from "@/components/canvas/GenerativeField";
 import { Hero } from "@/components/sections/Hero";
 import { ExpertiseCarousel } from "@/components/sections/ExpertiseCarousel";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
@@ -9,9 +8,7 @@ import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <div className="relative cursor-crosshair bg-ink text-foreground">
-      {/* Generative denoising field — homepage background only */}
-      <GenerativeField />
+    <div className="relative cursor-crosshair text-foreground">
       <Hero />
       <ExpertiseCarousel />
       <FeaturedProjects />

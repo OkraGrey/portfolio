@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
 import { site } from "@/lib/site";
 
 // TODO: set NEXT_PUBLIC_WEB3FORMS_KEY
@@ -11,12 +11,13 @@ const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const INPUT_CLASS =
-  "w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-foreground placeholder:text-subtle focus:border-primary/50 focus:outline-none";
+  "w-full rounded-[12px] border border-white/[0.12] bg-surface px-4 py-3.5 text-[15px] text-foreground placeholder:text-subtle outline-none transition-colors focus:border-primary";
 
 /**
  * Contact form — posts to Web3Forms when an access key is configured, and
  * always offers a mailto fallback prefilled with the current field values.
- * No backend; safe under static export.
+ * No backend; safe under static export. Restyled to the design (placeholder
+ * fields, a pill budget selector, gradient submit) with labels kept for a11y.
  */
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -75,10 +76,11 @@ export function ContactForm() {
   const submitting = status === "submitting";
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {/* Web3Forms control fields */}
       <input type="hidden" name="access_key" value={ACCESS_KEY} />
       <input type="hidden" name="subject" value="New portfolio inquiry" />
+      <input type="hidden" name="budget" value={budget} />
 
       {/* Honeypot — visually hidden, ignored by humans, caught from bots. */}
       <input
@@ -90,85 +92,95 @@ export function ContactForm() {
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="contact-name" className="text-[14px] text-muted">
-          Name
-        </label>
-        <input
-          id="contact-name"
-          name="name"
-          type="text"
-          required
-          aria-required="true"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          className={INPUT_CLASS}
-        />
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="contact-name" className="sr-only">
+            Name
+          </label>
+          <input
+            id="contact-name"
+            name="name"
+            type="text"
+            required
+            aria-required="true"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your name"
+            className={INPUT_CLASS}
+          />
+        </div>
+        <div>
+          <label htmlFor="contact-email" className="sr-only">
+            Email
+          </label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            required
+            aria-required="true"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className={INPUT_CLASS}
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="contact-email" className="text-[14px] text-muted">
-          Email
-        </label>
-        <input
-          id="contact-email"
-          name="email"
-          type="email"
-          required
-          aria-required="true"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@company.com"
-          className={INPUT_CLASS}
-        />
-      </div>
+      <fieldset className="flex flex-col gap-2.5">
+        <legend className="font-mono text-[11px] uppercase tracking-[0.14em] text-subtle">
+          Budget
+        </legend>
+        <div className="flex flex-wrap gap-2.5">
+          {site.contact.budgets.map((b) => {
+            const selected = budget === b;
+            return (
+              <button
+                key={b}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => setBudget(selected ? "" : b)}
+                className={cn(
+                  "rounded-full border px-4 py-[9px] text-[13.5px] transition-colors",
+                  selected
+                    ? "border-primary bg-primary/10 text-primary-bright"
+                    : "border-white/[0.14] text-muted hover:border-primary hover:text-primary-bright",
+                )}
+              >
+                {b}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="contact-description" className="text-[14px] text-muted">
-          Project Description
+      <div>
+        <label htmlFor="contact-description" className="sr-only">
+          Project description
         </label>
         <textarea
           id="contact-description"
           name="message"
           required
           aria-required="true"
-          rows={5}
+          rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Tell me what you're building."
-          className={INPUT_CLASS}
+          placeholder="What are you building?"
+          className={cn(INPUT_CLASS, "resize-y")}
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="contact-budget" className="text-[14px] text-muted">
-          Budget Range
-        </label>
-        <select
-          id="contact-budget"
-          name="budget"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          className={INPUT_CLASS}
-        >
-          <option value="">Budget range (optional)</option>
-          {site.contact.budgets.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </select>
-      </div>
+      <button
+        type="submit"
+        disabled={submitting}
+        className="inline-flex w-full items-center justify-center gap-[9px] rounded-[12px] bg-[linear-gradient(135deg,#8b94ff,#7782ff)] px-[26px] py-[15px] text-[15px] font-semibold text-[#07080c] shadow-[0_14px_40px_-16px_rgba(119,130,255,0.8)] transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {submitting && <Loader2 aria-hidden className="h-4 w-4 animate-spin" />}
+        Send message →
+      </button>
 
       <div className="flex flex-wrap items-center gap-4">
-        <Button type="submit" variant="primary" disabled={submitting}>
-          {submitting && (
-            <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
-          )}
-          Send Message
-        </Button>
-
         {/* Always-available mailto fallback. */}
         <a
           href={mailtoHref}
